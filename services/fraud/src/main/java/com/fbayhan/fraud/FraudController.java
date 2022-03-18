@@ -1,16 +1,23 @@
 package com.fbayhan.fraud;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/fraud-check")
 public class FraudController {
 
-    @PostMapping
-    public FraudCheckResponse isFraudster(){
+    private  final  FraudCheckHistoryService fraudCheckHistoryService;
 
+    public FraudController(FraudCheckHistoryService fraudCheckHistoryService) {
+        this.fraudCheckHistoryService = fraudCheckHistoryService;
+    }
+
+    @GetMapping(path = "{customerId}")
+    public FraudCheckResponse isFraudster(@PathVariable("customerId") Integer customerID){
+
+        boolean isFraudulentCustomer= fraudCheckHistoryService.isFraudulentCustomer(customerID);
+
+        return  new FraudCheckResponse(isFraudulentCustomer);
     }
 
 }
