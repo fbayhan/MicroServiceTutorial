@@ -1,9 +1,20 @@
 package com.fbayhan.customer;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 @Service
-public record CustomerService(CustomerRepository customerRepository) {
+public class CustomerService {
+
+    private final CustomerRepository customerRepository;
+    private final RestTemplate restTemplate;
+
+    public CustomerService(CustomerRepository customerRepository, RestTemplate restTemplate) {
+        this.customerRepository = customerRepository;
+        this.restTemplate = restTemplate;
+    }
+
+
     public void registerCustomer(CustomerRequest customerRequest) {
 
         /*
@@ -20,6 +31,16 @@ public record CustomerService(CustomerRepository customerRepository) {
         customer.setFirstName(customerRequest.firstName());
         customer.setLastName(customerRequest.lastName());
 
-        customerRepository.save(customer);
+        customerRepository.saveAndFlush(customer);
+
+        FraudCheckResponse fraudCheckResponse= restTemplate.getForObject(
+                "http://FRAUD/api/v1/fraud-check/{customerId}",
+                FraudCheckResponse.class,
+                customer.getId()
+        );
+        if(fraudCheckResponse.isFraudster()){
+            throw new IllegalStateException("frauster");
+        }
+
     }
 }
