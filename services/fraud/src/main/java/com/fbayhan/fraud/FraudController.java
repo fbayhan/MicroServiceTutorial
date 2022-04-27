@@ -1,5 +1,6 @@
 package com.fbayhan.fraud;
 
+import com.fbayhan.clients.fraud.FraudCheckResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,6 +19,8 @@ public class FraudController {
         boolean isFraudulentCustomer= fraudCheckHistoryService.isFraudulentCustomer(customerID);
 
         System.out.println("fraud check request for customer " + customerID);
+
+
 
         return  new FraudCheckResponse(isFraudulentCustomer);
     }

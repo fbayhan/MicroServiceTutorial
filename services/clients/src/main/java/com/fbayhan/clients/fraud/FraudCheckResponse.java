@@ -1,4 +1,4 @@
-package com.fbayhan.customer;
+package com.fbayhan.clients.fraud;
 
 public record FraudCheckResponse(Boolean isFraudster) {
 }

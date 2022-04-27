@@ -16,7 +16,8 @@ public record CustomerController(CustomerService customerService) {
 
     @PostMapping
     public void registerCustomer(@RequestBody  CustomerRequest customerRequest) {
-        log.info("{}",customerRequest);
+
+        System.out.println("Merhaba ");
 
 
         customerService.registerCustomer(customerRequest);
